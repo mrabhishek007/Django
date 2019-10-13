@@ -1,0 +1,92 @@
+Here appname = myapp, modulename = pages
+
+
+
+* Create a virtual Environment so that packages installed will be specif to this project (Use Pycharm project directory for that)
+
+* pip install django
+
+* django-admin startproject appname  => Starts a new application
+
+* python manage.py runserver  => To run python application server
+
+* Activate the Django from setting/language and framework (Pycharm feature)
+
+* git init
+* create a '.gitignore' file then go to https://www.gitignore.io. Search 'django' and copy the raw data. Add 'venv' to the ignore list manually
+* git add .
+* git commit -m 'initial-commit'
+
+* python manage.py startapp blog(It is the module name)  => Creates an module for blog inside the application
+
+* Add  'modulename.app.ModuleNameConfig' in myapp/setting.py in INSTALLED_APPS list here 'modulename' is dynamic (name of the module)
+
+* Create urls.py in modulename app
+
+* Create url pattern like appname urls.py
+
+* now update the .views.py and make methods according to url pattern which will redirect to those methods
+
+* update appname/setting.py and update the 'DIRS': [os.path.join(BASE_DIR, 'templates')] . now we can define our templates in root/templates/*.html
+
+* create a base.html template in template folder which will keep common html template other template will extend base.html
+
+* add STATIC_ROOT, STATICFILES_DIRS in settings.py to mention the static folder location
+
+* put ur static files in appname/static/(*js,*css, *font, *img files) as described in STATICFILES_DIRS of settings.py
+
+* Now run 'python manage.py collectstatic' command to manage static file. A new dir static will be created which will
+  contain all static files in the folder mentioned in STATIC_ROOT
+
+* Now static files can be imported in html. Check base.html for more info
+
+
+
+
+****************************************************************************************************************************************
+                                                    CONNECTING TO POSTGRES DB
+
+1. Install postgres and pgadmin on windows
+2. To connect with django follow the following steps :
+        a. pip install psycopg2
+        b. pip install psycopg2-binary
+        c. Update the following changes in DATABASES variable in settings.py :
+            DATABASES = {
+                            'default': {
+                                'ENGINE': 'django.db.backends.postgresql', # Database type
+                                'NAME': 'btredb', # DB NAME
+                                'USER': 'postgres', # USER NAME
+                                'PASSWORD': '12345', # PASSWORD WHILE INSTALLING POSTGRES
+                                'HOST': 'localhost'
+                            }
+                        }
+
+
+        d. Run "python manage.py migrate" to migrate the current admin table to the db.
+        e. Now run the server again. Now postgres db is connected with django app
+
+
+
+******************************************************************************************************************************************
+                                                WORKING WITH POSTEGRESQL (OBJECT RELATIONAL MAPPING)
+
+1. First design the schema for the application
+   Ex : For listings table what are the columns are required
+2. Now convert that schema into a Model, model.py is available in every module. Visit django docs for more info
+3. Install 'pip install Pillow'. Required for support of ImageField directory creation
+3. To populate the modals(tables) into db run "Run "python manage.py makemigrations".
+   It will first populate the migrations/__init__.py into respected app modules
+4. If error occurs while importing custom modules into the model (happens sometimes while using Foregin Key) follow following steps :
+    * If you go to File -> Settings -> Project: YourProjectName -> Project Structure
+    * you'll have a directory layout of the project you're currently working in.
+    * You'll have to go through your directories and label them as being either the Source directory for all your Source files, or as a
+      Resource folder for files that are strictly for importing.
+5. Now a new file will be created in module name / migrations/ 001_initial.py which will contain info. about models(table).
+   If you want to check which sql command will be executed while populating db run "python manage.py sqlmigrate modulename 0001"
+6. Now Run "python manage.py migrate" to populate the db with new tables
+
+
+
+
+
+
