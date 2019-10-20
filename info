@@ -17,7 +17,7 @@ Here appname = myapp, modulename = pages
 * git add .
 * git commit -m 'initial-commit'
 
-* python manage.py startapp blog(It is the module name)  => Creates an module for blog inside the application
+* python manage.py startapp blogn(It is the module name)  => Creates an module for blog inside the application
 
 * Add  'modulename.app.ModuleNameConfig' in myapp/setting.py in INSTALLED_APPS list here 'modulename' is dynamic (name of the module)
 
@@ -84,6 +84,93 @@ Here appname = myapp, modulename = pages
 5. Now a new file will be created in module name / migrations/ 001_initial.py which will contain info. about models(table).
    If you want to check which sql command will be executed while populating db run "python manage.py sqlmigrate modulename 0001"
 6. Now Run "python manage.py migrate" to populate the db with new tables
+
+
+
+******************************************************************************************************************************************
+                                                WORKING WITH ADMIN PANEL
+
+1. Create a Superuser by running command "python manage.py createsuperuser" and provide username, pwd, email etc
+2. Login the admin panel by visiting "localhost://admin"
+3. admin.py is available in every module of the application.
+4. use admin.py to register models into the admin area so admin can perform add, remove, update operation on the model(table) from admin side.
+5. Open settings.py where we will mention "MEDIA_ROOT" & "MEDIA_URL" where photos will get uploaded
+6. open main urls.py and append the "MEDIA_ROOT" & "MEDIA_URL" in the url pattern
+
+
+        ****************************************************************************************************************
+                                         MODIFYING THE ADMIN BLOCK ( HTML & CSS )
+
+        1. Create a folder admin and put the "base_site.html" inside the admin folder to modify the first page
+        2. Override the "blocks blockName" available in the predefined admin template files to implement the changes
+        3. To apply the styles in the admin panel mention css file path in html file like -
+            <block extrastyle >
+                <link rel="stylesheet" href="{% static 'css/admin.css' %}">
+            </endblock>
+        4. You can provide additional functionality to the table of the admin modules page specificallys
+            Just create an additional class in moduleName/admin.py and register the class like following:
+            ex : admin.site.register(Listings, ListingAdmin) Listings = Model Name, ListingAdmin = Extra functionality on Listing Table
+
+
+
+
+******************************************************************************************************************************************
+                                            RETRIEVING DATA FROM DATABASE IN FRONT END
+
+1. Open the views.py of the moduleName and retrieve the data from Model
+
+2. create a dictionary to send data to template and retrieve using {{ keyname }} in template file
+
+3. To access the media folder (saved while uploading the images in admin template) use the following syntax:
+    ex : src="{{ keyname.img_name.url }}"
+
+4. Using for loop, if else block for conditions in template file
+
+5. Adding 'django.contrib.humanize' in settings.py/INSTALLED_APPS to use django filter feature
+
+6. Adding django inbuilt pagination feature in any template.
+   First use pagination on retrieved item list in view.py and pass that object to template. Now iterable object has
+   pagination methods in-build in it, which will be used to handle pagination on template.
+   Eg : Visit listings.html for implementation of pagination feature or visit django website for more info
+
+7. Working with dynamic url routing on the based of id in listings.html
+   ex :  <a href="{% url 'listing' listing.id %}" >More Info</a> compiles into <a href="/listings/6" >More Info</a>
+
+8. Working with get_object_or_404(list, pk=primary_key_id) which would redirect to 404 not found page if primary key not available
+    ex: Used in listings/views.py while sending listing response
+
+9. Accessing plain dictionary object in template using {{ key.items }}:
+    ex:   {% for key, val in dict_name.items %}
+                        <option value="{{ key }}">{{ val }}</option>
+           {% endfor %}:
+
+10. Working with forms on the homepage and search page. Use <form action=pagename.html> to redirect the form when submitted.
+   Input fields on the forms will be converted to query parameter where "name" attribute is the key of respective fields
+   and can be accessed in views.py using  action.GET.keyName where "keyName = name attribute of input Field"
+
+11. Preserving the search value on the search page in the form  by passing 'values' = action.GET from view.py
+
+12. Using filter operation on the model to add search functionality on search page which will be achieved by passing 'Field Lookups'
+    as an argument to the querylist object.
+    Ex : Listings.objects.filter(pub_date__lte='2006-01-01')
+         where Listings is a modal name && pub_date__lte is a "Field Lookups". Here pub_date is col_name
+         The above statement is equals to : SELECT * FROM Listings WHERE pub_date <= '2006-01-01';
+
+     *** For more info on db queries, visit https://docs.djangoproject.com/en/2.2/topics/db/queries/
+
+
+
+******************************************************************************************************************************************
+                                               USING AUTHENTICATION
+
+1. First create a new module by using 'python manage.py startapp account' and register the app in settings.py and urls.py
+2. Django automatically creates a table 'auth-user' with application which will contain the info about the users
+3. For logout functionality redirecting to index page :
+   Ex :  redirect(to='index') in views.py
+
+
+
+
 
 
 

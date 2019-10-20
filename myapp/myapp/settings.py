@@ -13,6 +13,9 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+from django.contrib import messages
+from django.db import connection
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Quick-start development settings - unsuitable for production
@@ -32,12 +35,15 @@ INSTALLED_APPS = [
     'pages.apps.PagesConfig',
     'listings.apps.ListingsConfig',
     'realtors.apps.RealtorsConfig',
+    'accounts.apps.AccountsConfig',
+    'contacts.apps.ContactsConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.humanize',
 
 ]
 
@@ -68,6 +74,33 @@ TEMPLATES = [
         },
     },
 ]
+
+LOGGING = {
+    'disable_existing_loggers': False,
+    'version': 1,
+    'handlers': {
+        'console': {
+            # logging handler that outputs log messages to terminal
+            'class': 'logging.StreamHandler',
+            'level': 'DEBUG',  # message level to be written to console
+        },
+    },
+    'loggers': {
+        '': {
+            # this sets root level logger to log debug and higher level
+            # logs to console. All other loggers inherit settings from
+            # root level logger.
+            'handlers': ['console'],
+            'level': 'DEBUG',
+            'propagate': False,  # this tells logger to send logging message
+            # to its parent (will send if set to True)
+        },
+        'django.db': {
+            # django also has database level logging
+            'level': 'DEBUG'
+        },
+    },
+}
 
 WSGI_APPLICATION = 'myapp.wsgi.application'
 
@@ -124,3 +157,22 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'myapp/static')
     # run python manage.py collectstatic command which will copy all static data from myapp/static folder to a root folder in static dir
 ]
+
+# Media Folder Settings
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')  # folder name where photos will get uploaded
+MEDIA_URL = '/media/'
+
+# Error Message Settings
+from django.contrib.messages import constants as messages
+
+# Django Flash Message
+MESSAGE_TAGS = {
+    messages.ERROR: 'danger'
+}
+
+# Email Config
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'vkgsbs2@gmail.com'
+EMAIL_HOST_PASSWORD = '82045900'
+EMAIL_USE_TLS = True

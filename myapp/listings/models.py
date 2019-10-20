@@ -30,4 +30,6 @@ class Listings(models.Model):
 
     # Returns title
     def __str__(self):
+        # Used to identify the row in admin panel.So row will be identified with the title name.
+        # If not defined it will show obj name, so difficult identify
         return self.title

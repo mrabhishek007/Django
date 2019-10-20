@@ -1,0 +1,46 @@
+:root {
+    --primary-color: #10284e;
+    --secondary-color: #30caa0;
+}
+
+
+#header {
+    background: var(--primary-color);
+    color: white;
+}
+
+#branding #head {
+    color: white;
+}
+
+a:link, a:visited {
+    color: var(--primary-color);
+}
+
+div.breadcrumbs{
+    background: var(--secondary-color);
+    color: var(--primary-color);
+}
+div.breadcrumbs a{
+    color: #333;
+}
+
+.module h2, .module caption, .inline-group h2 {
+    background: var(--secondary-color);
+}
+
+.selector-chosen h2 {
+    background: var(--secondary-color) !important;
+    color: #333 !important;
+}
+
+.button, input[type=submit], input[type=button], .submit-row input, a.button {
+    background: var(--primary-color);
+    color: white;
+}
+
+.button.default, input[type=submit].default, .submit-row input.default {
+    background: var(--primary-color);
+    color: white;
+}
+
