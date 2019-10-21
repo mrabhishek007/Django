@@ -164,9 +164,71 @@ Here appname = myapp, modulename = pages
                                                USING AUTHENTICATION
 
 1. First create a new module by using 'python manage.py startapp account' and register the app in settings.py and urls.py
-2. Django automatically creates a table 'auth-user' with application which will contain the info about the users
+2. Django comes with inbuilt  table 'auth-user' in application which will contain the info about the users
+3. To gain admin right create superuser using Python manage.py
 3. For logout functionality redirecting to index page :
    Ex :  redirect(to='index') in views.py
+4. Django inbuilt provide "User" object which will contain info about the user info and auth info which can be accessed anywhere in the app even on template
+   Ex : Fetch user : "request.user" on any view.py and {{ user.username }} on any template
+5. To create a new user we can use above created 'account' app   to simulate the registeration:
+   ex : from django.contrib.auth.models import User
+        User.objects.create_user(username=username, email=email, password=password, first_name=first_name, last_name=last_name)
+
+6. To login into the registered user use following syntax:
+    ex: from django.contrib import messages, auth
+        user = auth.authenticate(username=username, password=password)
+        if user : // Logged in successfully
+
+    * For more info visit account module view.py
+
+7. Dynamically changing nav login when user is logged in. Checkout nav.html for more info
+
+*******************************************************************************************************************************
+                                                 RETRIEVING DATA FROM FORM
+
+1. Use req.POST['field_name'] to retrieve data from form
+   ex :
+        def register(request):
+            if request.method == "POST":
+                first_name = request.POST['first_name']  # where first name is a input field
+
+
+*******************************************************************************************************************************
+                                                 USING DJANGO POPUP MESSAGE SERVICE
+
+1. Django provide inbuilt flash message service which can be used to show popup message
+2. First configure settings.py like following  where we will configure the message in such a way that it will return class name dynamically:
+    # Error Message Settings
+    from django.contrib.messages import constants as messages
+    # Django Flash Message
+    MESSAGE_TAGS = {
+        messages.ERROR: 'danger' # return 'danger' which is used in bootstrap if message.error(request, 'msg') is called
+    }
+3. Create a _alert.html separately which will contain structure of message template
+   ex : Visit templates/partials/_alerts.html for more info
+4. Use success, error on message object to show a popup message
+    ex :
+        messages.error(request, 'Testing Username is taken')
+        messages.success(request, 'Success')
+
+
+*******************************************************************************************************************************
+                                                 SENDING A MAIL
+
+ 1. Django inbuilt provides sending mail facility
+ 2. Configure settings.py like following  :
+    EMAIL_HOST = 'smtp.gmail.com' # GMAIL #
+    EMAIL_PORT = 587 # GMAIL #
+    EMAIL_HOST_USER = 'email_address'
+    EMAIL_HOST_PASSWORD = 'password'
+    EMAIL_USE_TLS = True
+ 3. Send an email like following  :
+    send_mail(subject='Property Listing Enquiry',
+              message=f'There has been an enquiry for {listing} by {name}. Sign into Admin Panel for more info.',
+              from_email=settings.EMAIL_HOST_USER,
+              recipient_list=['akumar@ijonaservices.com', 'vikashgaurav.vkg@gmail.com'],
+              fail_silently=False
+              )
 
 
 
